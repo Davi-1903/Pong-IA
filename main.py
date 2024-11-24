@@ -1,5 +1,5 @@
 import pygame
-from lib.constantes import *
+from lib.classes import *
 
 
 class Pong:
@@ -14,10 +14,12 @@ class Pong:
         self.clock = pygame.time.Clock()
     
     def loop(self):
+        jogo = Game(self.screen)
         while True:
             self.screen.fill('#202020')
             self.clock.tick(FPS)
             self.eventos()
+            jogo.run()
             pygame.display.update()
     
     def eventos(self):
