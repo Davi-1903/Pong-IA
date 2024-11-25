@@ -1,6 +1,16 @@
 # Pong-IA
 
-Jogo feito para estudar redes neurais
+Jogo feito para estudar redes neurais.
+
+<p align="center">
+    <img loading="lazy" src="image.png" width="500">
+</p>
+
+## Rede Neural
+
+A rede neural usada foi uma rede do tipo **Feed Forward** com 3 camadas: entrada, oculta e saída. A Função de ativação usada foi a **ReLU**, por ser a mais comum. Não foram utilizados **bias** (viés) por ser uma rede extremamente simples.
+
+Ela foi treinada com o algoritmo genético clássico.
 
 ## Requerimentos
 
