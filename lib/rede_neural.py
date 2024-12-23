@@ -82,11 +82,11 @@ class Network:
             elif weights_inicialization == 'he':
                 self.__weights.append(random.randn(self.__inputs, len(self.__layers[0])) * sqrt(2 / self.__inputs))
                 for idx in range(1, len(self.__layers)):
-                    self.__weights.append(random.randn(len(self.__layers[idx - 1]), len(self.__layers[idx])) * sqrt(2 / self.__layers[idx - 1]))
+                    self.__weights.append(random.randn(len(self.__layers[idx - 1]), len(self.__layers[idx])) * sqrt(2 / len(self.__layers[idx - 1])))
             elif weights_inicialization == 'lecun':
                 self.__weights.append(random.randn(self.__inputs, len(self.__layers[0])) * sqrt(1 / self.__inputs))
                 for idx in range(1, len(self.__layers)):
-                    self.__weights.append(random.randn(len(self.__layers[idx - 1]), len(self.__layers[idx])) * sqrt(1 / self.__layers[idx - 1]))
+                    self.__weights.append(random.randn(len(self.__layers[idx - 1]), len(self.__layers[idx])) * sqrt(1 / len(self.__layers[idx - 1])))
             else:
                 raise ValueError(f'Invalid weights inicialization "{weights_inicialization}". Choose from random, xavier, he, lecun')
 
