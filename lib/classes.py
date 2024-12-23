@@ -1,5 +1,5 @@
 import pygame, json
-from random import randrange
+from random import choice
 from lib.rede_neural import Network
 from lib.constantes import *
 
@@ -38,12 +38,12 @@ class PlayerIA(Player):
 class Bola:
     def __init__(self, pos: tuple):
         self.rect = pygame.Rect(0, 0, 10, 10)
-        self.new_postion(pos)
+        self.new_direction(pos)
         self.vel = VELOCIDADE
     
-    def new_postion(self, pos: tuple):
+    def new_direction(self, pos: tuple):
         self.rect.center = pos
-        self.dir_x, self.dir_y = randrange(-1, 2, 2), randrange(-1, 2, 2)
+        self.dir_x, self.dir_y = choice([-1, 1]), choice([-1, 1])
     
     def draw(self, screen: pygame.Surface):
         pygame.draw.rect(screen, 'white', self.rect)
@@ -95,12 +95,12 @@ class Game:
         
         if self.bola.rect.right < 0:
             self.start = False
-            self.bola.new_postion((LARGURA // 2, (ALTURA + 80) // 2))
+            self.bola.new_direction((LARGURA // 2, (ALTURA + 80) // 2))
             self.jogador2_pontos += 1
             self.jogador1.rect.centery = (ALTURA + 80) // 2
         elif self.bola.rect.left > LARGURA:
             self.start = False
-            self.bola.new_postion((LARGURA // 2, (ALTURA + 80) // 2))
+            self.bola.new_direction((LARGURA // 2, (ALTURA + 80) // 2))
             self.jogador1_pontos += 1
             self.jogador1.rect.centery = (ALTURA + 80) // 2
         
