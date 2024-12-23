@@ -50,9 +50,7 @@ class Bola:
     def update(self):
         self.rect.x += VELOCIDADE * self.dir_x
         self.rect.y += VELOCIDADE * self.dir_y
-        if self.rect.top + VELOCIDADE * self.dir_y < 80:
-            self.dir_y *= -1
-        elif self.rect.bottom + VELOCIDADE * self.dir_y > ALTURA:
+        if self.rect.top + VELOCIDADE * self.dir_y < 80 or self.rect.bottom + VELOCIDADE * self.dir_y > ALTURA:
             self.dir_y *= -1
 
 
@@ -103,9 +101,7 @@ class Game:
             self.jogador1_pontos += 1
             self.jogador1.rect.centery = (ALTURA + 80) // 2
         
-        if self.jogador1.rect.colliderect(self.bola.rect):
-            self.bola.dir_x *= -1
-        elif self.jogador2.rect.colliderect(self.bola.rect):
+        if self.jogador1.rect.colliderect(self.bola.rect) or self.jogador2.rect.colliderect(self.bola.rect):
             self.bola.dir_x *= -1
 
     def run(self):
