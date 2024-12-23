@@ -1,5 +1,6 @@
-import pygame, pickle
+import pygame, json
 from random import randrange
+from lib.rede_neural import Network
 from lib.constantes import *
 
 
@@ -22,8 +23,8 @@ class Player:
 class PlayerIA(Player):
     def __init__(self, pos: tuple):
         super().__init__(pos)
-        with open(os.path.join(DIRETORIO_PRINCIPAL, 'network.pkl'), 'rb') as f:
-            self.rede = pickle.load(f)
+        with open(os.path.join(DIRETORIO_PRINCIPAL, 'network.json'), 'r') as file:
+            self.rede = Network(**json.load(file))
     
     def update(self, parametro: tuple):
         result = self.rede.feedforward([self.rect.centery - parametro[0]])
