@@ -8,9 +8,9 @@ Jogo feito para estudar redes neurais.
 
 ## Rede Neural
 
-A rede neural usada foi uma rede do tipo **Feed Forward** com 3 camadas: entrada, oculta e saída. A Função de ativação usada foi a **ReLU**, por ser a mais comum. Não foram utilizados **bias** (viés) por ser uma rede extremamente simples.
+A rede neural usada foi uma rede do tipo **Feed Forward** com 2 camadas: entrada e saída. A Função de ativação usada foi a **ReLU**, por ser a mais comum. Não foram utilizados **bias** (viés) por ser uma rede extremamente simples.
 
-Ela foi treinada com o algoritmo genético clássico.
+Ela não precisou ser treinada por ser extremamente simples.
 
 ## Requerimentos
 
