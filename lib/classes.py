@@ -12,9 +12,9 @@ class Player:
         keys = pygame.key.get_pressed()
         if not (keys[pygame.K_UP] and keys[pygame.K_DOWN]):
             if keys[pygame.K_UP] and self.rect.top > 80:
-                self.rect.y -= 5
+                self.rect.y -= VELOCIDADE
             elif keys[pygame.K_DOWN] and self.rect.bottom < ALTURA:
-                self.rect.y += 5
+                self.rect.y += VELOCIDADE
     
     def draw(self, screen: pygame.Surface):
         pygame.draw.rect(screen, 'white', self.rect)
@@ -30,16 +30,15 @@ class PlayerIA(Player):
         result = self.rede.feed_forward([self.rect.centery - parametro[0]])
         if not all(result):
             if result[0] and self.rect.top > 80:
-                self.rect.y -= 5
+                self.rect.y -= VELOCIDADE
             if result[1] and self.rect.bottom < ALTURA:
-                self.rect.y += 5
+                self.rect.y += VELOCIDADE
 
 
 class Bola:
     def __init__(self, pos: tuple):
         self.rect = pygame.Rect(0, 0, 10, 10)
         self.new_direction(pos)
-        self.vel = VELOCIDADE
     
     def new_direction(self, pos: tuple):
         self.rect.center = pos
@@ -49,11 +48,11 @@ class Bola:
         pygame.draw.rect(screen, 'white', self.rect)
     
     def update(self):
-        self.rect.x += self.vel * self.dir_x
-        self.rect.y += self.vel * self.dir_y
-        if self.rect.top + self.vel * self.dir_y < 80:
+        self.rect.x += VELOCIDADE * self.dir_x
+        self.rect.y += VELOCIDADE * self.dir_y
+        if self.rect.top + VELOCIDADE * self.dir_y < 80:
             self.dir_y *= -1
-        elif self.rect.bottom + self.vel * self.dir_y > ALTURA:
+        elif self.rect.bottom + VELOCIDADE * self.dir_y > ALTURA:
             self.dir_y *= -1
 
 
