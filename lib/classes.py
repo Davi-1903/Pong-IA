@@ -27,7 +27,7 @@ class PlayerIA(Player):
             self.rede = Network(**json.load(file))
     
     def update(self, parametro: tuple):
-        result = self.rede.feedforward([self.rect.centery - parametro[0]])
+        result = self.rede.feed_forward([self.rect.centery - parametro[0]])
         if not all(result):
             if result[0] and self.rect.top > 80:
                 self.rect.y -= 5
