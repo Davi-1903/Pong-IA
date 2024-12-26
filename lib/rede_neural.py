@@ -28,7 +28,11 @@ class Neuron:
         self.activation_function = self.get_activation_function(activation_function)
 
     def get_activation_function(self, name: str) -> Callable[[float], float]:
-        '''Método que retorna a função de ativação.'''
+        '''Método que retorna a função de ativação.
+        
+        Parâmetros:
+        - `name:` Nome da função de ativação;
+        '''
         functions = {
             'none': lambda x: x - self.bias,
             'sigmoid': lambda x: 1 / (1 + exp(-x)),
