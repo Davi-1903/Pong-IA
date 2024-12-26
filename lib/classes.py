@@ -43,8 +43,8 @@ class PlayerIA(Player):
         with open(os.path.join(DIRETORIO_PRINCIPAL, 'network.json'), 'r') as file:
             self.rede = Network(**json.load(file))
     
-    def update(self, parametro: tuple):
-        result = self.rede.feed_forward([self.rect.centery - parametro[0]])
+    def update(self, parametro: int):
+        result = self.rede.feed_forward([self.rect.centery - parametro])
         if not all(result):
             if result[0] and self.rect.top > 80:
                 self.rect.y -= VELOCIDADE
@@ -143,7 +143,7 @@ class Game:
     def update(self):
         '''Método que atualiza o jogo.'''
         self.jogador1.update()
-        self.jogador2.update([self.bola.rect.centery])
+        self.jogador2.update(self.bola.rect.centery)
         if any(pygame.key.get_pressed()):
             self.start = True
         if self.start:
