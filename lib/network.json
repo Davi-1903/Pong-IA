@@ -1,4 +1,4 @@
 {
-    "layers": [1, ["relu", "relu"]],
+    "structure": [1, ["relu", "relu"]],
     "weights": [[[1, -1]]]
 }
