@@ -15,13 +15,13 @@ class Neuron:
         
         Parâmetros:
         - `activation_function:` Função de ativação;
-            - none
-            - sigmoid
-            - swish
-            - tanh
-            - relu
-            - leaky relu
-            - softplus
+            - none;
+            - sigmoid;
+            - swish;
+            - tanh;
+            - relu;
+            - leaky relu;
+            - softplus;
         '''
         self.__value = 0
         self.bias = 0
@@ -186,7 +186,7 @@ class Network:
         '''Método que realiza a feedforward da rede neural.
 
         Parâmetros:
-        - `parameters:` Parâmetros de entrada da rede neural.
+        - `parameters:` Parâmetros de entrada da rede neural;
         '''
         self.__layers[0].set_values(parameters, self.__weights[0])
         for idx in range(1, len(self.__layers)):

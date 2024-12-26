@@ -3,7 +3,12 @@ from lib.classes import *
 
 
 class Pong:
-    '''Jogo Pong'''
+    '''Jogo Pong
+    
+    Atributos:
+    - `screen:` Tela do jogo;
+    - `clock:` Relógio do jogo;
+    '''
     def __init__(self):
         '''Método construtor'''
         pygame.init()
