@@ -84,6 +84,10 @@ class Layer:
         '''Método que retorna os valores dos neurônios.'''
         return [neuron.value for neuron in self.__neurons]
 
+    def get_neurons(self) -> list:
+        '''Método que retorna os neurônios da camada.'''
+        return self.__neurons
+
     def set_biases(self, biases: list):
         '''Método para definir as biases dos neurônios.
         
@@ -185,6 +189,10 @@ class Network:
     def get_weights(self) -> list:
         '''Método que retorna os pesos da rede neural.'''
         return self.__weights
+
+    def get_layers(self) -> list:
+        '''Método que retorna as camadas da rede neural.'''
+        return self.__layers
 
     def feed_forward(self, parameters: list) -> list:
         '''Método que realiza a feedforward da rede neural.
