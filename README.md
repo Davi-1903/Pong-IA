@@ -24,6 +24,8 @@ O valor de entrada é multiplicado pelos respectivos pesos e os neurônios de sa
     <img loading="lazy" src="ilustração2.png" width="300">
 </p>
 
+O arquivo [rede_neural.py](lib/rede_neural.py) contém a rede genérica. Ou seja, ela pode ser facilmente implementada em outros projetos.
+
 ## Requerimentos
 
 O jogo foi feito utilizando a biblioteca `pygame`. Além dela, também foram necessários a utilização de outras bibliotecas que não são padrões do python, por isso é preciso que elas também sejam baixadas.
