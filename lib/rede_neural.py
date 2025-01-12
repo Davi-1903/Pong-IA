@@ -10,6 +10,8 @@ class Neuron:
     - `bias:` Viés cognitivo;
     - `activation_function:` Função de ativação;
     '''
+    __slots__ = ['__value', 'bias', 'activation_function']
+
     def __init__(self, activation_function: Literal['none', 'sigmoid', 'swish', 'tanh', 'relu', 'leaky_relu', 'softplus']):
         '''Método construtor.
         
@@ -65,6 +67,8 @@ class Layer:
     Atributos:
     - `neurons:` Lista que guarda os neurônios (privado);
     '''
+    __slots__ = ['__neurons']
+
     def __init__(self, neurons: list[str]):
         '''Método construtor.
         
@@ -118,6 +122,8 @@ class Network:
     - `layers:` Lista de camadas (privado);
     - `weights:` Pesos da rede neural (privado);
     '''
+    __slots__ = ['__inputs', '__hiddens', '__outputs', '__layers', '__weights']
+
     def __init__(self, structure: list[list], weights: list = [], weights_initialization: Literal['random', 'xavier', 'he', 'lecun'] = 'random', biases: list = []):
         '''Método construtor.
         
