@@ -124,10 +124,12 @@ class Game:
         '''Método que desenha os textos do jogo.'''
         font1 = pygame.font.SysFont('04b19', 200)
         font2 = pygame.font.SysFont('04b19', 35)
-        pontos = font1.render(f'{self.jogador1_pontos}:{self.jogador2_pontos}', True, '#303030')
+        pontos_1 = font1.render(str(self.jogador1_pontos), True, '#303030')
+        pontos_2 = font1.render(str(self.jogador2_pontos), True, '#303030')
         player = font2.render('Player', True, 'white')
         neural_network = font2.render('Neural Network', True, 'white')
-        self.screen.blit(pontos, pontos.get_rect(center=(LARGURA / 2, (ALTURA + 80) / 2)))
+        self.screen.blit(pontos_1, pontos_1.get_rect(center=(LARGURA / 4, (ALTURA + 80) / 2)))
+        self.screen.blit(pontos_2, pontos_2.get_rect(center=(3 * LARGURA / 4, (ALTURA + 80) / 2)))
         self.screen.blit(player, player.get_rect(center=(LARGURA / 4, 40)))
         self.screen.blit(neural_network, neural_network.get_rect(center=(3 * LARGURA / 4, 40)))
     
