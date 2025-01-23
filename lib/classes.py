@@ -57,8 +57,8 @@ class Bola:
     
     Atributos:
     - `rect:` Retângulo tanto de colisão como de exibição;
-    - `dir_x:` Sentido na horizontal;
-    - `dir_y:` Sentido na vertical;
+    - `vel_x:` Velocidade na horizontal;
+    - `vel_y:` Velocidade na vertical;
     '''
     def __init__(self, pos: tuple):
         '''Método construtor.
@@ -70,13 +70,13 @@ class Bola:
         self.new_direction(pos)
     
     def new_direction(self, pos: tuple):
-        '''Método que define uma nova posição para a bola.
+        '''Método que define uma nova posição e direção para a bola.
         
         Parâmetros:
         - `pos:` Nova posição;
         '''
         self.rect.center = pos
-        self.dir_x, self.dir_y = choice([-1, 1]), choice([-1, 1])
+        self.vel_x, self.vel_y = choice([-VELOCIDADE, VELOCIDADE]), choice([-VELOCIDADE, VELOCIDADE])
     
     def draw(self, screen: pygame.Surface):
         '''Método que desenha a bola.
@@ -88,10 +88,10 @@ class Bola:
     
     def update(self):
         '''Método que atualiza do jogo.'''
-        self.rect.x += VELOCIDADE * self.dir_x
-        self.rect.y += VELOCIDADE * self.dir_y
-        if self.rect.top + VELOCIDADE * self.dir_y < 80 or self.rect.bottom + VELOCIDADE * self.dir_y > ALTURA:
-            self.dir_y *= -1
+        self.rect.x += self.vel_x
+        self.rect.y += self.vel_y
+        if self.rect.top + self.vel_y < 80 or self.rect.bottom + self.vel_y > ALTURA:
+            self.vel_y *= -1
 
 
 class Game:
@@ -163,7 +163,7 @@ class Game:
             self.jogador1.rect.centery = (ALTURA + 80) // 2
         
         if self.jogador1.rect.colliderect(self.bola.rect) or self.jogador2.rect.colliderect(self.bola.rect):
-            self.bola.dir_x *= -1
+            self.bola.vel_x *= -1
 
     def run(self):
         '''Método que executa o jogo.'''
