@@ -18,7 +18,7 @@ class Player:
         '''
         self.rect = pygame.Rect(*pos, 10, 100)
     
-    def update(self) -> None:
+    def update(self):
         '''Método que atualiza o jogador.'''
         keys = pygame.key.get_pressed()
         if not (keys[pygame.K_UP] and keys[pygame.K_DOWN]):
