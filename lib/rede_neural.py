@@ -27,9 +27,9 @@ class Neuron:
         '''
         self.__value = 0
         self.bias = 0
-        self.activation_function = self.get_activation_function(activation_function)
+        self.activation_function = self.select_activation_function(activation_function)
 
-    def get_activation_function(self, name: str) -> Callable[[float], float]:
+    def select_activation_function(self, name: str) -> Callable[[float], float]:
         '''Método que retorna a função de ativação.
         
         Parâmetros:
@@ -159,25 +159,41 @@ class Network:
         if not weights:
             self.__weights = []
             if weights_initialization == 'random':
-                self.__weights.append(random.uniform(-0.01, 0.01, size=(self.__inputs, len(self.__layers[0]))))
-                for idx in range(1, len(self.__layers)):
-                    self.__weights.append(random.uniform(-0.01, 0.01, size=(len(self.__layers[idx - 1]), len(self.__layers[idx]))))
+                self.inicialization_random()
             elif weights_initialization == 'xavier':
-                limit = sqrt(6 / (self.__inputs + len(self.__layers[0])))
-                self.__weights.append(random.uniform(-limit, limit, size=(self.__inputs, len(self.__layers[0]))))
-                for idx in range(1, len(self.__layers)):
-                    limit = sqrt(6 / (len(self.__layers[idx - 1]) + len(self.__layers[idx])))
-                    self.__weights.append(random.uniform(-limit, limit, size=(len(self.__layers[idx - 1]), len(self.__layers[idx]))))
+                self.inicialization_xavier()
             elif weights_initialization == 'he':
-                self.__weights.append(random.randn(self.__inputs, len(self.__layers[0])) * sqrt(2 / self.__inputs))
-                for idx in range(1, len(self.__layers)):
-                    self.__weights.append(random.randn(len(self.__layers[idx - 1]), len(self.__layers[idx])) * sqrt(2 / len(self.__layers[idx - 1])))
+                self.inicialization_he()
             elif weights_initialization == 'lecun':
-                self.__weights.append(random.randn(self.__inputs, len(self.__layers[0])) * sqrt(1 / self.__inputs))
-                for idx in range(1, len(self.__layers)):
-                    self.__weights.append(random.randn(len(self.__layers[idx - 1]), len(self.__layers[idx])) * sqrt(1 / len(self.__layers[idx - 1])))
+                self.inicialization_lecun()
             else:
                 raise ValueError(f'Invalid weights inicialization "{weights_initialization}". Choose from random, xavier, he, lecun')
+    
+    def inicialization_random(self):
+        '''Método para inicialização de pesos com o método random.'''
+        self.__weights.append(random.uniform(-0.01, 0.01, size=(self.__inputs, len(self.__layers[0]))))
+        for idx in range(1, len(self.__layers)):
+            self.__weights.append(random.uniform(-0.01, 0.01, size=(len(self.__layers[idx - 1]), len(self.__layers[idx]))))
+    
+    def inicialization_xavier(self):
+        '''Método para inicialização de pesos com o método xavier.'''
+        limit = sqrt(6 / (self.__inputs + len(self.__layers[0])))
+        self.__weights.append(random.uniform(-limit, limit, size=(self.__inputs, len(self.__layers[0]))))
+        for idx in range(1, len(self.__layers)):
+            limit = sqrt(6 / (len(self.__layers[idx - 1]) + len(self.__layers[idx])))
+            self.__weights.append(random.uniform(-limit, limit, size=(len(self.__layers[idx - 1]), len(self.__layers[idx]))))
+    
+    def inicialization_he(self):
+        '''Método para inicialização de pesos com o método he.'''
+        self.__weights.append(random.randn(self.__inputs, len(self.__layers[0])) * sqrt(2 / self.__inputs))
+        for idx in range(1, len(self.__layers)):
+            self.__weights.append(random.randn(len(self.__layers[idx - 1]), len(self.__layers[idx])) * sqrt(2 / len(self.__layers[idx - 1])))
+
+    def inicialization_lecun(self):
+        '''Método para inicialização de pesos com método lecun.'''
+        self.__weights.append(random.randn(self.__inputs, len(self.__layers[0])) * sqrt(1 / self.__inputs))
+        for idx in range(1, len(self.__layers)):
+            self.__weights.append(random.randn(len(self.__layers[idx - 1]), len(self.__layers[idx])) * sqrt(1 / len(self.__layers[idx - 1])))
 
     def set_biases(self, biases: list):
         '''Método para a definição dos bias da rede neural.
