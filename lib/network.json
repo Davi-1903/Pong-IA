@@ -1,4 +1,7 @@
 {
-    "structure": [1, ["relu", "relu"]],
+    "structure": [
+        {"neurons": 1},
+        {"neurons": 2, "function": "relu"}
+    ],
     "weights": [[[1, -1]]]
 }

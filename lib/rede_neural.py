@@ -69,13 +69,17 @@ class Layer:
     '''
     __slots__ = ['__neurons']
 
-    def __init__(self, neurons: list[str]):
+    def __init__(self, neurons: dict):
         '''Método construtor.
         
         Parâmetros:
-        - `neurons:` Lista de strings em que cada string é uma função de ativação para o neurônio;
+        - `neurons:` Dicionário com o número de entradas e função de ativação;
+
+        ```
+        >>> Layer({'neurons': 5, 'function': 'sigmoid'})
+        ```
         '''
-        self.__neurons = [Neuron(function) for function in neurons]
+        self.__neurons = [Neuron(neurons['function']) for n in range(neurons['neurons'])]
 
     def __len__(self) -> int:
         return len(self.__neurons)
@@ -124,11 +128,15 @@ class Network:
     '''
     __slots__ = ['__inputs', '__hiddens', '__outputs', '__layers', '__weights']
 
-    def __init__(self, structure: list[list], weights: list = [], weights_initialization: Literal['random', 'xavier', 'he', 'lecun'] = 'random', biases: list = []):
+    def __init__(self, structure: list[dict], weights: list = [], weights_initialization: Literal['random', 'xavier', 'he', 'lecun'] = 'random', biases: list = []):
         '''Método construtor.
         
         Parâmetros:
-        - `structure:` Estrutura da rede neural, lista de lista com as funções de ativação (Primeira camada apenas com a quantidade de entradas);
+        - `structure:` Estrutura da rede neural, lista de dicionários com entradas e funções de ativação (Primeira camada apenas com a quantidade de entradas);
+
+            ```
+            >>> Network([{'neurons': 1}, {'neurons': 2, 'function': 'sigmoid'}])
+            ```
         - `weights:` Lista de pesos da rede neural (opcional);
         - `weights_initialization:` Método de inicialização dos pesos (opcional);
             - `random`;
