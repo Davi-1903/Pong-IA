@@ -224,6 +224,64 @@ class Network:
         '''Método que retorna as camadas da rede neural.'''
         return self.__layers
 
+    def backpropagation(self, inputs: list, targets: list, learning_rate: float):
+        '''
+        Método para realizar a retropropagação (backpropagation) da rede neural.
+
+        Parâmetros:
+        - `inputs:` Lista de entradas da rede neural;
+        - `targets:` Lista de saídas esperadas;
+        - `learning_rate:` Taxa de aprendizado (opcional, padrão é 0.01);
+        '''
+        outputs = self.feed_forward(inputs)
+
+        output_errors = array(targets) - array(outputs)
+
+        output_gradients = output_errors * array([self.derivative(neuron.get_raw(), neuron.activation_function) for neuron in self.__layers[-1].get_neurons()])
+
+        hidden_values = array(self.__layers[-2].get_values()) if len(self.__layers) > 1 else array(inputs)
+        self.__weights[-1] += learning_rate * dot(hidden_values.reshape(-1, 1), output_gradients.reshape(1, -1))
+
+        for i, neuron in enumerate(self.__layers[-1].get_neurons()):
+            neuron.bias += learning_rate * output_gradients[i]
+
+        hidden_errors = output_gradients
+        for i in range(len(self.__layers) - 2, -1, -1):
+            hidden_errors = dot(hidden_errors, self.__weights[i + 1].T)
+
+            hidden_gradients = hidden_errors * array([self.derivative(neuron.get_raw(), neuron.activation_function) for neuron in self.__layers[i].get_neurons()])
+
+            previous_values = array(inputs) if i == 0 else array(self.__layers[i - 1].get_values())
+            self.__weights[i] += learning_rate * dot(previous_values.reshape(-1, 1), hidden_gradients.reshape(1, -1))
+
+            for j, neuron in enumerate(self.__layers[i].get_neurons()):
+                neuron.bias += learning_rate * hidden_gradients[j]
+
+    def derivative(self, x: float, activation_function: Callable[[float], float]) -> float:
+        '''
+        Calcula a derivada da função de ativação.
+
+        Parâmetros:
+        - `x:` Valor de entrada;
+        - `activation_function:` Função de ativação;
+        '''
+        if activation_function.__name__ == '<lambda>':
+            if activation_function(0) == 0.5:
+                return activation_function(x) * (1 - activation_function(x))
+            elif activation_function(0) == 0:
+                return 1 if x > 0 else 0
+            elif activation_function(1) == 1:
+                return 1
+            else:
+                sigmoid_x = 1 / (1 + exp(-x))
+                return sigmoid_x + x * sigmoid_x * (1 - sigmoid_x)
+        elif activation_function.__name__ == 'tanh':
+            return 1 - tanh(x) ** 2
+        elif activation_function.__name__ == 'softplus':
+            return 1 / (1 + exp(-x))
+        else:
+            return 1 if x > 0 else 0.01
+
     def feed_forward(self, parameters: list) -> list:
         '''Método que realiza a feedforward da rede neural.
 
