@@ -233,7 +233,7 @@ class Network:
         Parâmetros:
         - `inputs:` Lista de entradas da rede neural;
         - `targets:` Lista de saídas esperadas;
-        - `learning_rate:` Taxa de aprendizado (opcional, padrão é 0.01);
+        - `learning_rate:` Taxa de aprendizado;
         '''
         outputs = self.feed_forward(inputs)
 
