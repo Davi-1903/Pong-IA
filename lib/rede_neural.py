@@ -10,7 +10,7 @@ class Neuron:
     - `bias:` Viés cognitivo;
     - `activation_function:` Função de ativação;
     '''
-    __slots__ = ['__value', 'bias', 'activation_function']
+    __slots__ = ['__value', '__bias', '__activation_function']
 
     def __init__(self, activation_function: Literal['none', 'sigmoid', 'swish', 'tanh', 'relu', 'leaky_relu', 'softplus']):
         '''Método construtor.
@@ -26,8 +26,8 @@ class Neuron:
             - softplus;
         '''
         self.__value = 0
-        self.bias = 0
-        self.activation_function = self.select_activation_function(activation_function)
+        self.__bias = 0
+        self.__activation_function = self.select_activation_function(activation_function)
 
     def select_activation_function(self, name: str) -> Callable[[float], float]:
         '''Método que retorna a função de ativação.
@@ -36,7 +36,7 @@ class Neuron:
         - `name:` Nome da função de ativação;
         '''
         functions = {
-            'none': lambda x: x - self.bias,
+            'none': lambda x: x - self.__bias,
             'sigmoid': lambda x: 1 / (1 + exp(-x)),
             'swish': lambda x: x / (1 + exp(-x)),
             'tanh': tanh,
@@ -50,13 +50,23 @@ class Neuron:
 
     @property
     def value(self) -> float:
-        return self.activation_function(self.__value + self.bias)
+        return self.__activation_function(self.__value + self.__bias)
 
     @value.setter
     def value(self, raw_value: float):
         if not isinstance(raw_value, (int, float, int64, float64)):
             raise TypeError('The value must be a number.')
         self.__value = raw_value
+    
+    @property
+    def bias(self) -> float:
+        return self.__bias
+
+    @bias.setter
+    def bias(self, raw_bias: float):
+        if not isinstance(raw_bias, (int, float, int64, float64)):
+            raise TypeError('The bias must be a number.')
+        self.__value = raw_bias
 
     def get_raw(self) -> float:
         '''Método que retorna o valor sem viés e sem função de ativação.'''
