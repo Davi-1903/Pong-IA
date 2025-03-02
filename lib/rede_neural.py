@@ -1,4 +1,4 @@
-from numpy import exp, log, tanh, dot, array, random, sqrt
+from numpy import exp, log, tanh, dot, array, random, sqrt, int64, float64
 from typing import Literal, Callable
 
 
@@ -54,6 +54,8 @@ class Neuron:
 
     @value.setter
     def value(self, raw_value: float):
+        if not isinstance(raw_value, (int, float, int64, float64)):
+            raise TypeError('The value must be a number.')
         self.__value = raw_value
 
     def get_raw(self) -> float:
