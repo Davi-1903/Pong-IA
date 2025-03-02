@@ -176,7 +176,7 @@ class Network:
             - `lecun`;
         '''
         self.__weights = weights
-        if weights is None:
+        if not weights:
             self.__weights = []
             if weights_initialization == 'random':
                 self.inicialization_random()
@@ -221,7 +221,7 @@ class Network:
         Parâmetros:
         - `biases:` Lista de bias da rede neural;
         '''
-        if biases is not None:
+        if biases:
             for idx, biases in enumerate(biases):
                 self.__layers[idx].set_biases(biases)
 
