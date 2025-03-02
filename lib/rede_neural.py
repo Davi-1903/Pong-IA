@@ -140,7 +140,7 @@ class Network:
     '''
     __slots__ = ['__inputs', '__hiddens', '__outputs', '__layers', '__weights']
 
-    def __init__(self, structure: list[dict], weights: list = [], weights_initialization: Literal['random', 'xavier', 'he', 'lecun'] = 'random', biases: list = []):
+    def __init__(self, structure: list[dict], weights: list | None = None, weights_initialization: Literal['random', 'xavier', 'he', 'lecun'] = 'random', biases: list | None = None):
         '''Método construtor.
         
         Parâmetros:
@@ -176,7 +176,7 @@ class Network:
             - `lecun`;
         '''
         self.__weights = weights
-        if not weights:
+        if weights is None:
             self.__weights = []
             if weights_initialization == 'random':
                 self.inicialization_random()
@@ -221,8 +221,9 @@ class Network:
         Parâmetros:
         - `biases:` Lista de bias da rede neural;
         '''
-        for idx, biases in enumerate(biases):
-            self.__layers[idx].set_biases(biases)
+        if biases is not None:
+            for idx, biases in enumerate(biases):
+                self.__layers[idx].set_biases(biases)
 
     def get_biases(self) -> list:
         '''Método que retorna as biases da rede neural.'''
