@@ -10,7 +10,7 @@ class Neuron:
     - `bias:` Viés cognitivo;
     - `activation_function:` Função de ativação;
     '''
-    __slots__ = ['__value', '__bias', '__activation_function']
+    __slots__ = ['__value', '__bias', 'activation_function']
 
     def __init__(self, activation_function: Literal['none', 'sigmoid', 'swish', 'tanh', 'relu', 'leaky_relu', 'softplus']):
         '''Método construtor.
@@ -27,7 +27,7 @@ class Neuron:
         '''
         self.__value = 0
         self.__bias = 0
-        self.__activation_function = self.select_activation_function(activation_function)
+        self.activation_function = self.select_activation_function(activation_function)
 
     def select_activation_function(self, name: str) -> Callable[[float], float]:
         '''Método que retorna a função de ativação.
@@ -50,7 +50,7 @@ class Neuron:
 
     @property
     def value(self) -> float:
-        return self.__activation_function(self.__value + self.__bias)
+        return self.activation_function(self.__value + self.__bias)
 
     @value.setter
     def value(self, raw_value: float):
