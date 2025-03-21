@@ -66,7 +66,7 @@ class Neuron:
     def bias(self, raw_bias: float):
         if not isinstance(raw_bias, (int, float, int64, float64)):
             raise TypeError('The bias must be a number.')
-        self.__value = raw_bias
+        self.__bias = raw_bias
 
     def get_raw(self) -> float:
         '''Método que retorna o valor sem viés e sem função de ativação.'''
