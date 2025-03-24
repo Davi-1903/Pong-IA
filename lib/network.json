@@ -1,7 +1,7 @@
 {
     "structure": [
-        {"neurons": 1},
-        {"neurons": 2, "function": "relu"}
+        {"numbers_of_neurons": 1},
+        {"numbers_of_neurons": 2, "activation_function": "relu"}
     ],
     "weights": [[[1, -1]]]
 }

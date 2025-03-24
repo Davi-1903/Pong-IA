@@ -73,6 +73,60 @@ class Neuron:
         return self.__value
 
 
+class NeuronRecurrent(Neuron):
+    '''Neurônio recorrente matemático.
+    
+    Atributos:
+    - `hidden_state:` Estado oculto do neurônio (privado);
+    - `hidden_weights:` Pesos do estado oculto (privado);
+    '''
+    __slots__ = ['__hidden_state', '__hidden_weights']
+
+    def __init__(self, activation_function: Literal['none', 'sigmoid', 'swish', 'tanh', 'relu', 'leaky_relu', 'softplus']):
+        '''Método construtor.
+        
+        Parâmetros:
+        - `activation_function:` Função de ativação;
+            - none;
+            - sigmoid;
+            - swish;
+            - tanh;
+            - relu;
+            - leaky relu;
+            - softplus;
+        '''
+        super().__init__(activation_function)
+        self.__hidden_state = 0
+        self.__hidden_weights = random.randn(1, 1)
+
+    @Neuron.value.getter
+    def value(self) -> float:
+        '''Método que retorna o valor do neurônio após aplicar o estado oculto, pesos e função de ativação.'''
+        raw_value = self.get_raw() + self.__hidden_state * self.__hidden_weights + self.bias
+        self.__hidden_state = self.activation_function(raw_value)
+        return self.__hidden_state
+
+    @property
+    def hidden_weights(self) -> float:
+        '''Método que retorna os pesos do estado oculto.'''
+        return self.__hidden_weights
+
+    @hidden_weights.setter
+    def hidden_weights(self, raw_hidden_weights: float):
+        '''Método para definir os pesos do estado oculto.
+        
+        Parâmetros:
+        - `raw_hidden_weights:` Valor dos pesos;
+        '''
+        if not isinstance(raw_hidden_weights, (int, float, int64, float64)):
+            raise TypeError('The hidden weights must be a number.')
+        self.__hidden_weights = raw_hidden_weights
+
+    def reset_hidden_state(self):
+        '''Método para reiniciar o estado oculto.'''
+        self.__hidden_state = 0
+
+
 class Layer:
     '''Camada de neurônios.
     
@@ -81,17 +135,20 @@ class Layer:
     '''
     __slots__ = ['__neurons']
 
-    def __init__(self, neurons: dict):
+    def __init__(self, numbers_of_neurons: int, activation_function: Literal['none', 'sigmoid', 'swish', 'tanh', 'relu', 'leaky_relu', 'softplus'], recurrent: bool = False):
         '''Método construtor.
         
         Parâmetros:
-        - `neurons:` Dicionário com o número de entradas e função de ativação;
+        - `numbers_of_neurons:` Quantidade de neurônios;
+        - `activation_function:` Função de ativação;
+        - `recurrent:` Se o neurônio é recorrente (opcional);
 
         ```
-        >>> Layer({'neurons': 5, 'function': 'sigmoid'})
+        >>> Layer(5, 'sigmoid')
+        >>> Layer(5, 'sigmoid', True)
         ```
         '''
-        self.__neurons = [Neuron(neurons['function']) for n in range(neurons['neurons'])]
+        self.__neurons = [NeuronRecurrent(activation_function) if recurrent else Neuron(activation_function) for n in range(numbers_of_neurons)]
 
     def __len__(self) -> int:
         return len(self.__neurons)
@@ -126,6 +183,26 @@ class Layer:
         '''
         for idx, value in enumerate(dot(array(values), weigths)):
             self.__neurons[idx].value = value
+    
+    def reset_hidden_states(self):
+        '''Método para reiniciar os estados ocultos dos neurônios.'''
+        for neuron in self.__neurons:
+            if isinstance(neuron, NeuronRecurrent):
+                neuron.reset_hidden_state()
+
+    def get_hidden_weights(self) -> list:
+        '''Método que retorna os pesos dos neurônios ocultos.'''
+        return [neuron.hidden_weights for neuron in self.__neurons if isinstance(neuron, NeuronRecurrent)]
+
+    def set_hidden_weights(self, weights: list):
+        '''Método para definir os pesos dos neurônios ocultos.
+        
+        Parâmetros:
+        - `weights:` Lista de pesos;
+        '''
+        for idx, weight in enumerate(weights):
+            if isinstance(self.__neurons[idx], NeuronRecurrent):
+                self.__neurons[idx].hidden_weights = weight
 
 
 class Network:
@@ -140,7 +217,7 @@ class Network:
     '''
     __slots__ = ['__inputs', '__hiddens', '__outputs', '__layers', '__weights']
 
-    def __init__(self, structure: list[dict], weights: list | None = None, weights_initialization: Literal['random', 'xavier', 'he', 'lecun'] = 'random', biases: list | None = None):
+    def __init__(self, structure: list[dict], weights: list | None = None, weights_initialization: Literal['random', 'xavier', 'he', 'lecun'] = 'random', biases: list | None = None, hidden_weights: list | None = None):
         '''Método construtor.
         
         Parâmetros:
@@ -156,13 +233,15 @@ class Network:
             - `he`;
             - `lecun`;
         - `biases:` Lista de bias da rede neural (opcional);
+        - `hidden_weights:` Lista de pesos dos neurônios ocultos (opcional);
         '''
         self.__inputs, *self.__hiddens, self.__outputs = structure
         self.__layers = []
         for idx in range(1, len(structure)):
-            self.__layers.append(Layer(structure[idx]))
+            self.__layers.append(Layer(**structure[idx]))
         self.set_weights(weights, weights_initialization)
         self.set_biases(biases)
+        self.set_hidden_weights(hidden_weights)
 
     def set_weights(self, weights: list, weights_initialization: Literal['random', 'xavier', 'he', 'lecun'] = 'random'):
         '''Método para a definição dos pesos ou, caso não haja pesos, inicialização.
@@ -232,6 +311,20 @@ class Network:
     def get_weights(self) -> list:
         '''Método que retorna os pesos da rede neural.'''
         return self.__weights
+    
+    def get_hidden_weights(self) -> list:
+        '''Método que retorna os pesos dos neurônios ocultos da rede neural.'''
+        return [layer.get_hidden_weights() for layer in self.__layers]
+    
+    def set_hidden_weights(self, hidden_weights: list):
+        '''Método para definir os pesos dos neurônios ocultos da rede neural.
+        
+        Parâmetros:
+        - `hidden_weights:` Lista de pesos dos neurônios ocultos;
+        '''
+        if hidden_weights:
+            for idx, weights in enumerate(hidden_weights):
+                self.__layers[idx].set_hidden_weights(weights)
 
     def get_layers(self) -> list:
         '''Método que retorna as camadas da rede neural.'''
