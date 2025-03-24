@@ -1,5 +1,6 @@
 from numpy import exp, log, tanh, dot, array, random, sqrt, int64, float64
 from typing import Literal, Callable
+from random import gauss
 
 
 class Neuron:
@@ -97,7 +98,7 @@ class NeuronRecurrent(Neuron):
         '''
         super().__init__(activation_function)
         self.__hidden_state = 0
-        self.__hidden_weights = random.randn(1, 1)
+        self.__hidden_weights = gauss(0, 1)
 
     @Neuron.value.getter
     def value(self) -> float:
