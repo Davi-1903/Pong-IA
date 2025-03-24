@@ -44,7 +44,7 @@ class PlayerIA(Player):
             self.rede = Network(**json.load(file))
     
     def update(self, parametro: int):
-        action = self.rede.feed_forward([self.rect.centery - parametro])
+        action = self.rede.forward([self.rect.centery - parametro])
         if not all(action):
             if action[0] and self.rect.top > 80:
                 self.rect.y -= VELOCIDADE
